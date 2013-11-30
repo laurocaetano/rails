@@ -174,6 +174,21 @@ class HasManyThroughAssociationsTest < ActiveRecord::TestCase
     assert person.posts.include?(post)
   end
 
+  def test_build_when_not_persisted
+    post = Post.new
+    person = Person.new
+    reader = Reader.new(post: post, person: person)
+
+    post.readers << reader
+    person.readers << reader
+
+    assert_equal person, post.readers.first.person
+    assert_equal post, person.readers.first.post
+
+    assert_equal post, person.posts.first
+    assert_equal person, post.people.first
+  end
+
   def test_associate_existing
     post   = posts(:thinking)
     person = people(:david)
