@@ -1,3 +1,12 @@
+*   Fix `rename_column_indexes` to rename an index according to `allowed_index_name_length`.
+    It was raising an error when renaming columns with long names. In order to prevent that,
+    we check if the `new_index_name` length is greater than the `allowed_index_name_length`.
+    If it exceeds, we decrease it.
+
+    Fixes #12585
+
+    *Lauro Caetano*
+
 *   Polymorphic `belongs_to` associations with the `touch: true` option set update the timestamps of
     the old and new owner correctly when moved between owners of different types.
 
