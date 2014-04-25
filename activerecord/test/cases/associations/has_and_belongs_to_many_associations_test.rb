@@ -21,6 +21,9 @@ require 'models/membership'
 require 'models/sponsor'
 require 'models/country'
 require 'models/treaty'
+require 'models/publisher'
+require 'models/publisher/article'
+require 'models/publisher/magazine'
 require 'active_support/core_ext/string/conversions'
 
 class ProjectWithAfterCreateHook < ActiveRecord::Base
@@ -818,5 +821,14 @@ class HasAndBelongsToManyAssociationsTest < ActiveRecord::TestCase
 
     assert_equal 1, treasure.rich_people.size
     assert_equal person_first_name, rich_person.first_name, 'should not run associated person validation on update when validate: false'
+  end
+
+  def test_habtm_in_a_module
+    magazine = Publisher::Magazine.create
+    article = Publisher::Article.create
+    magazine.articles << article
+    magazine.save
+
+    assert_equal Publisher::Magazine.where(id: magazine.id).first.articles.first, article
   end
 end
